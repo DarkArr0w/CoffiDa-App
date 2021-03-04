@@ -20,6 +20,10 @@ class Account extends Component{
     });
   }
 
+  componentWillUnmount(){
+    this.unsubscribe();
+  }
+
   userinfo = async () => {
     let firstname = await AsyncStorage.getItem('@first_name');
     this.setState({first_name: firstname});

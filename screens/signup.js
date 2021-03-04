@@ -20,12 +20,7 @@ class Signup extends Component{
       headers: {
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify({
-        first_name: this.state.first_name,
-        last_name: this.state.last_name,
-        email: this.state.email,
-        password: this.state.password
-      })
+      body: JSON.stringify(this.state)
     })
     .then((response) => response.json())
     .then((responseJson) => {

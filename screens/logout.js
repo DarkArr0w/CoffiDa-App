@@ -23,15 +23,15 @@ class Logout extends Component{
   getToken = async () => {
         const value = await AsyncStorage.getItem('@token');
         if(value !== null) {
-            this.setState({token: value});
+          this.setState({token: value});
         }else{
- //         this.props.navigation.navigate("Login");
+          this.props.navigation.navigate("Login");
         }
     }
 
   logout = async () => {
-    let token = await AsyncStorage.getItem('@token');
     await AsyncStorage.removeItem('@token');
+    await AsyncStorage.removeItem('@id');
     await AsyncStorage.removeItem('@first_name');
     await AsyncStorage.removeItem('@last_name');
     await AsyncStorage.removeItem('@email');
@@ -42,7 +42,7 @@ class Logout extends Component{
     {
       method: 'POST',
       headers: {
-        'X-Authorization': token
+        'X-Authorization': this.state.token
       },
     })
     .then((response) => {
