@@ -4,19 +4,20 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Rating, AirbnbRating } from 'react-native-elements';
 import { RNCamera } from 'react-native-camera';
 
-class Review extends Component{
+class UpdateReview extends Component{
 
   constructor(props){
     super(props);
   
     this.state = {
-      overall_rating: 0,
-      price_rating: 0,
-      quality_rating: 0,
-      clenliness_rating: 0,
-      review_body: "",
-      review_id: 0,
-      photo: false,
+      overall_rating: this.props.route.params.overall_rating,
+      price_rating: this.props.route.params.price_rating,
+      quality_rating: this.props.route.params.quality_rating,
+      clenliness_rating: this.props.route.params.clenliness_rating,
+      review_body: this.props.route.params.review_body,
+      review_id: this.props.route.params.review_id,
+      location_id: this.props.route.params.location_id,
+      photo: false
     }
   }
 
@@ -66,7 +67,7 @@ class Review extends Component{
   sendToServer = async (data) => {
     console.log(data.uri);
     let token = await AsyncStorage.getItem('@token');
-    const loc_id = this.props.route.params.location_id;
+    const loc_id = this.state.location_id;
     const rev_id = this.state.review_id;
     return fetch("http://10.0.2.2:3333/api/1.0.0/location/"+loc_id+"/review/"+rev_id+"/photo",
     {
@@ -80,7 +81,7 @@ class Review extends Component{
     .then((response) => {
       if(response.status === 200){
         ToastAndroid.show("Photo Taken", ToastAndroid.SHORT);
-        this.props.navigation.navigate('Location');
+        this.props.navigation.navigate('MyReviews');
       }else{
         throw 'Something went wrong';
       }
@@ -100,17 +101,36 @@ class Review extends Component{
   }
 
   exit() {
-    ToastAndroid.show("Review Successfully Added", ToastAndroid.SHORT);
-    this.props.navigation.navigate('Location');
+    ToastAndroid.show("Review Successfully Updated", ToastAndroid.SHORT);
+    this.props.navigation.navigate('MyReviews');
   }
 
-  addReview = async () =>{
-    const id = this.props.route.params.location_id;
-    console.log(id);
+  deletePhoto = async () => {
     let token = await AsyncStorage.getItem('@token');
-    return fetch("http://10.0.2.2:3333/api/1.0.0/location"+"/"+id+"/review",
+    
+    return fetch("http://10.0.2.2:3333/api/1.0.0/location/"+this.state.location_id+"/review/"+this.state.review_id+"/photo",
     {
-      method: 'POST',
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'image/jpegn',
+        'X-Authorization': token
+      }
+    })
+    .then(() => {
+          this.setState({photo: true})
+    })
+    .catch((error) => {
+      console.error(error);
+      ToastAndroid.show(error, ToastAndroid.SHORT);
+    })
+  }
+
+
+  updateReview = async () =>{
+    let token = await AsyncStorage.getItem('@token');
+    return fetch("http://10.0.2.2:3333/api/1.0.0/location"+"/"+this.state.location_id+"/review/"+this.state.review_id,
+    {
+      method: 'PATCH',
       headers: {
         'Content-Type': 'application/json',
         'X-Authorization': token
@@ -119,14 +139,14 @@ class Review extends Component{
     })
     .then((response) => {
       console.log(response.status);
-      if(response.status === 201){
+      if(response.status === 200){
         this.getUserInfo();
         Alert.alert(
           'Alert',
-          'Do you want to add photo?',
+          'Do you want to change/add photo?',
           [
             {text: 'No', onPress: () => this.exit(), style: 'cancel'},
-            {text: 'Yes', onPress: () => this.setState({photo: true})},
+            {text: 'Yes', onPress: () => this.deletePhoto()}
           ]
         );
       }else{
@@ -164,7 +184,7 @@ class Review extends Component{
           <Text>Overall Rating</Text>
           <AirbnbRating
             size={15}
-            defaultRating={0}
+            defaultRating={this.state.overall_rating}
             onFinishRating={(rating) => this.ratingCompleted(rating, "overall_rating")}
           />
 
@@ -172,7 +192,7 @@ class Review extends Component{
             onChangeText={(reviewbody) => this.setState({review_body: reviewbody})}
             value={this.state.review_body}
           />
-          <Button title="Upload" onPress={() => this.addReview()} />
+          <Button title="Update" onPress={() => this.updateReview()} />
         </View>
       );
     }
@@ -180,4 +200,4 @@ class Review extends Component{
 }
 
 
-export default Review;
+export default UpdateReview;

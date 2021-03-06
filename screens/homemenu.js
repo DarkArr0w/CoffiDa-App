@@ -4,8 +4,17 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 class HomeMenu extends Component{
 
+  constructor(props){
+    super(props);
+
+    this.state = {
+      token: ''
+    }
+  }
+
   componentDidMount(){
     this.unsubscribe = this.props.navigation.addListener('focus', () => {
+      this.setState({token: ""});
       this.getToken();
     });
   }
@@ -13,6 +22,7 @@ class HomeMenu extends Component{
   componentWillUnmount(){
     this.unsubscribe();
   }
+  
 
   getToken = async () => {
     const value = await AsyncStorage.getItem('@token');

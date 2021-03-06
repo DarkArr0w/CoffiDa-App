@@ -65,7 +65,10 @@ class Logout extends Component{
   render(){
     return(
         <View>
-            <Button onPress={() => this.props.navigation.navigate('Account')} title="Account" />
+            <Button onPress={() => this.props.navigation.navigate('Account')} title="Account Info" />
+            <Button onPress={() => this.props.navigation.navigate('FavouriteCafes')} title="Favourite Cafes" />
+            <Button onPress={() => this.props.navigation.navigate('MyReviews')} title="My reviews" />
+            <Button onPress={() => this.props.navigation.navigate('AboutUs')} title="About Us" />
             <Button onPress={() =>  this.logout()} title="Logout" />
         </View>
     );

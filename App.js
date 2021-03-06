@@ -12,6 +12,10 @@ import Logout from './screens/logout';
 import Account from './screens/account';
 import Location from './screens/location';
 import Review from './screens/review';
+import AboutUs from './screens/aboutus';
+import MyReviews from './screens/myreviews';
+import FavouriteCafes from './screens/favouritecafes';
+import UpdateReview from './screens/updatereview';
 
 const Stack = createStackNavigator();
 
@@ -28,6 +32,11 @@ export default function Screens() {
             <Stack.Screen name="Account" component={Account} />
             <Stack.Screen name="Location" component={Location} />
             <Stack.Screen name="Review" component={Review} />
+            <Stack.Screen name="AboutUs" component={AboutUs} />
+            <Stack.Screen name="MyReviews" component={MyReviews} />
+            <Stack.Screen name="FavouriteCafes" component={FavouriteCafes} />
+            <Stack.Screen name="UpdateReview" component={UpdateReview} />
+
         </Stack.Navigator>
     </NavigationContainer>
   );

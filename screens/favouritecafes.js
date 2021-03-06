@@ -2,14 +2,14 @@ import React, { Component } from 'react';
 import { ActivityIndicator, Text, TouchableOpacity, View, ToastAndroid, FlatList } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage'; 
 
-class ListView extends Component{
+class FavouriteCafes extends Component{
 
   constructor(props){
     super(props);
   
     this.state = {
       isLoading: true,
-      locations: null
+      userData: null
     }
   }
 
@@ -18,12 +18,13 @@ class ListView extends Component{
   }
 
   
-
   getData = async () => {
     let token = await AsyncStorage.getItem('@token');
-    return fetch("http://10.0.2.2:3333/api/1.0.0/find",
+    let id = await AsyncStorage.getItem('@id');
+    return fetch("http://10.0.2.2:3333/api/1.0.0/user/"+id,
     {
     headers: {
+      'Content-Type': 'application/json',
       'X-Authorization': token
     },
     })
@@ -37,8 +38,11 @@ class ListView extends Component{
   .then((responseJson) => {
     this.setState({
       isLoading: false,
-      locations: responseJson
+      userData: responseJson
     })
+
+    console.log(responseJson);
+   
   })
   .catch((error) => {
     console.error(error);
@@ -56,9 +60,10 @@ class ListView extends Component{
     }else{
       return (
         <View>
-          <Text>Locations</Text>
+          <Text>Fav Locations</Text>
           <FlatList
-            data={this.state.locations}
+            contentContainerStyle={{ paddingBottom: 10}}
+            data={this.state.userData.favourite_locations}
             renderItem={({item}) => (
               <TouchableOpacity onPress={() => this.props.navigation.navigate('Location', {location_id: item.location_id})}>
               <View style={{padding: 10}}>
@@ -78,4 +83,4 @@ class ListView extends Component{
   }
 }
 
-export default ListView;
+export default FavouriteCafes;

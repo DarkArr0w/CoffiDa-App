@@ -43,9 +43,19 @@ class Home extends Component{
   }
 
   componentDidMount(){
-    this.findCoordinates();
-    this.getData();
+    this.unsubscribe = this.props.navigation.addListener('focus', () => {
+      this.checkToken();
+      this.findCoordinates();
+      this.getData();
+    });
   }
+
+  checkToken = async () => {
+    const token = await AsyncStorage.getItem('@token');
+    if (token == null) {
+      this.props.navigation.navigate('HomeMenu');
+    }
+  };
 
   findCoordinates(){
     console.log("state", this.state);
