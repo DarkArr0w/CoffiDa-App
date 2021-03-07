@@ -167,6 +167,25 @@ class Review extends Component{
             defaultRating={0}
             onFinishRating={(rating) => this.ratingCompleted(rating, "overall_rating")}
           />
+          <Text>Price Rating</Text>
+          <AirbnbRating
+            size={15}
+            defaultRating={0}
+            onFinishRating={(rating) => this.ratingCompleted(rating, "price_rating")}
+          />
+
+          <Text>Quality Rating</Text>
+          <AirbnbRating
+            size={15}
+            defaultRating={0}
+            onFinishRating={(rating) => this.ratingCompleted(rating, "quality_rating")}
+          />
+          <Text>Clenliness Rating</Text>
+          <AirbnbRating
+            size={15}
+            defaultRating={0}
+            onFinishRating={(rating) => this.ratingCompleted(rating, "clenliness_rating")}
+          />
 
           <TextInput
             onChangeText={(reviewbody) => this.setState({review_body: reviewbody})}

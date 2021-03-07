@@ -16,7 +16,7 @@ class Location extends Component{
       liked: false,
       rev_id: null,
       photo_path: null,
-      photo: false,
+      photo: false
     }
   }
 
@@ -184,11 +184,6 @@ getPhoto = async (review_id) => {
     },
   })
   .then((response) => {
-//    if(response.status === 200){
-//      this.setState({
-//      photo_path:"http://10.0.2.2:3333/api/1.0.0/location/"+loc_id+"/review/"+review_id+"/photo?timestamp="+Date.now(),
-//      photo: true
-//      });
       if (response.status === 200) {
         this.setState({
           photo_path: response.url+"?timestamp="+Date.now(),
@@ -258,7 +253,6 @@ checkLike(review_id){
           <Button onPress={() => this.props.navigation.navigate('Review', {location_id: this.state.location.location_id})} title="Add Review" />
           <Text>Reviews</Text>
           <FlatList
-            contentContainerStyle={{ paddingBottom: 10}}
             data={this.state.reviews}
             renderItem={({item}) => (
               <View style={{padding: 10}}>
