@@ -20,10 +20,10 @@ async function requestLocationPermission(){
     if (granted === PermissionsAndroid.RESULTS.GRANTED) {
       console.log('You can access location');
       return true;
-    }else{
+    }
       console.log('Location permission denied');
       return false;
-    }
+    
   } catch (err) {
     console.warn(err);
   }
@@ -82,7 +82,7 @@ class Home extends Component{
   }
 
   getData = async () => {
-    let token = await AsyncStorage.getItem('@token');
+    const token = await AsyncStorage.getItem('@token');
     return fetch("http://10.0.2.2:3333/api/1.0.0/find",
     {
       headers: {
@@ -92,9 +92,9 @@ class Home extends Component{
     .then((response) => {
       if(response.status === 200){
         return response.json()
-      }else{
-        throw 'Something went wrong';
       }
+        throw 'Something went wrong';
+      
     })
     .then((responseJson) => {
       this.setState({
@@ -116,7 +116,7 @@ class Home extends Component{
           <ActivityIndicator size="large" color="#f87217" />
         </View>
       )
-    }else{
+    }
       console.log("LOCATION 2: ", this.state.location);
       return (
         <View style={{flex:1}}>
@@ -150,7 +150,7 @@ class Home extends Component{
           </View>
         </View>
       );
-    }
+    
   }
 }
 const styles = StyleSheet.create({

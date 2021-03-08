@@ -24,8 +24,8 @@ class MyReviews extends Component{
   }
 
   getData = async () => {
-    let token = await AsyncStorage.getItem('@token');
-    let id = await AsyncStorage.getItem('@id');
+    const token = await AsyncStorage.getItem('@token');
+    const id = await AsyncStorage.getItem('@id');
     return fetch("http://10.0.2.2:3333/api/1.0.0/user/"+id,
     {
     headers: {
@@ -36,9 +36,9 @@ class MyReviews extends Component{
   .then((response) => {
     if(response.status === 200){
       return response.json()
-    }else{
-      throw 'Something went wrong';
     }
+      throw 'Something went wrong';
+    
   })
   .then((responseJson) => {
     this.setState({
@@ -54,7 +54,7 @@ class MyReviews extends Component{
 }
 
 deleteReview = async (review_id, location_id) => {
-  let token = await AsyncStorage.getItem('@token');
+  const token = await AsyncStorage.getItem('@token');
   return fetch("http://10.0.2.2:3333/api/1.0.0/location/"+location_id+"/review/"+review_id,
   {
     method: 'DELETE',
@@ -78,8 +78,8 @@ deleteReview = async (review_id, location_id) => {
 }
 
 getPhoto = async (review_id, location_id) => {
-  let token = await AsyncStorage.getItem('@token');
-  return fetch("http://10.0.2.2:3333/api/1.0.0/location/"+location_id+"/review/"+review_id+"/photo",
+  const token = await AsyncStorage.getItem('@token');
+  return fetch(`http://10.0.2.2:3333/api/1.0.0/location/${location_id}/review/${review_id}/photo`,
   {
     headers: {
       "Content-Type": "image/jpeg",
@@ -107,8 +107,8 @@ getPhoto = async (review_id, location_id) => {
 }
 
 deletePhoto = async (review_id, location_id) => {
-  let token = await AsyncStorage.getItem('@token');
-  return fetch("http://10.0.2.2:3333/api/1.0.0/location/"+location_id+"/review/"+review_id+"/photo",
+  const token = await AsyncStorage.getItem('@token');
+  return fetch(`http://10.0.2.2:3333/api/1.0.0/location/${location_id}/review/${review_id}/photo`,
   {
     method: 'DELETE',
     headers: {
@@ -138,7 +138,7 @@ render(){
           <ActivityIndicator size="large" color="#f87217" />
         </View>
       )
-    }else if (this.state.photo){
+    }if (this.state.photo){
       return(
         <View style={styles.container4}>
           <Image
@@ -156,11 +156,11 @@ render(){
           </TouchableOpacity>
         </View>
       )
-    }else{
+    }
       return (
         <View style={styles.container}>
           <ImageBackground
-            source={require('./../../Images/Coffee_Cup(0.3).jpg')} style={styles.image}>
+            source={require("../../Images/Coffee_Cup(0.3).jpg")} style={styles.image}>
             <FlatList
               data={this.state.userData.reviews}
               renderItem={({item}) => (
@@ -172,7 +172,7 @@ render(){
                     defaultRating={item.overall_rating}
                     size={18}
                     showRating={false}
-                    isDisabled={true}
+                    isDisabled
                     selectedColor='#F87217'
                     unSelectedColor='#DDDDDD'
                   />
@@ -187,7 +187,7 @@ render(){
                       defaultRating={item.price_rating}
                       size={12}
                       showRating={false}
-                      isDisabled={true}
+                      isDisabled
                       selectedColor='#F87217'
                       unSelectedColor='#DDDDDD'
                     />
@@ -195,7 +195,7 @@ render(){
                       defaultRating={item.quality_rating}
                       size={12}
                       showRating={false}
-                      isDisabled={true}
+                      isDisabled
                       selectedColor='#F87217'
                       unSelectedColor='#DDDDDD'
                     />
@@ -203,7 +203,7 @@ render(){
                       defaultRating={item.clenliness_rating}
                       size={12}
                       showRating={false}
-                      isDisabled={true}
+                      isDisabled
                       selectedColor='#F87217'
                       unSelectedColor='#DDDDDD'
                     />
@@ -255,7 +255,7 @@ render(){
           </ImageBackground>
         </View>
       )
-    }
+    
   }
 }
 const styles = StyleSheet.create({

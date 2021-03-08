@@ -20,9 +20,9 @@ class Review extends Component{
   }
 
   getUserInfo = async () => {
-    let token = await AsyncStorage.getItem('@token');
-    let id = await AsyncStorage.getItem('@id');
-    return fetch("http://10.0.2.2:3333/api/1.0.0/user/"+id,
+    const token = await AsyncStorage.getItem('@token');
+    const id = await AsyncStorage.getItem('@id');
+    return fetch(`http://10.0.2.2:3333/api/1.0.0/user/${id}`,
     {
       headers: {
         'Content-Type': 'application/json',
@@ -32,9 +32,9 @@ class Review extends Component{
     .then((response) => {
       if(response.status === 200){
         return response.json()
-      }else{
-        throw 'Something went wrong';
       }
+        throw 'Something went wrong';
+      
     })
     .then(async (responseJson) => {
       const userReview_id = [];
@@ -50,21 +50,12 @@ class Review extends Component{
     })
   }
 
-  ratingCompleted(rating, name) {
-    let stateObject = () => {
-      let returnObj = {};
-      returnObj[name] = rating;
-      return returnObj;
-    };
-    this.setState( stateObject );
-  }
-
   sendToServer = async (data) => {
     console.log(data.uri);
-    let token = await AsyncStorage.getItem('@token');
+    const token = await AsyncStorage.getItem('@token');
     const loc_id = this.props.route.params.location_id;
     const rev_id = this.state.review_id;
-    return fetch("http://10.0.2.2:3333/api/1.0.0/location/"+loc_id+"/review/"+rev_id+"/photo",
+    return fetch(`http://10.0.2.2:3333/api/1.0.0/location/${loc_id}/review/${rev_id}/photo`,
     {
       method: 'POST',
       headers: {
@@ -108,8 +99,8 @@ class Review extends Component{
     }else{
       const id = this.props.route.params.location_id;
       console.log(id);
-      let token = await AsyncStorage.getItem('@token');
-      return fetch("http://10.0.2.2:3333/api/1.0.0/location"+"/"+id+"/review",
+      const token = await AsyncStorage.getItem('@token');
+      return fetch(`${"http://10.0.2.2:3333/api/1.0.0/location"+"/"}${id}/review`,
       {
        method: 'POST',
         headers: {
@@ -140,6 +131,15 @@ class Review extends Component{
       });
     }
   }
+  
+  ratingCompleted(rating, name) {
+    const stateObject = () => {
+      const returnObj = {};
+      returnObj[name] = rating;
+      return returnObj;
+    };
+    this.setState( stateObject );
+  }
 
   render(){
     if(this.state.photo){
@@ -163,11 +163,11 @@ class Review extends Component{
           </TouchableOpacity>
         </View>
       )
-    }else{
+    }
       return (
         <View style={styles.container3}>
           <ImageBackground
-            source={require('./../../Images/Coffee_Cup(0.3).jpg')} style={styles.image}>
+            source={require("../../Images/Coffee_Cup(0.3).jpg")} style={styles.image}>
             <ScrollView>
               <Text style={styles.formLabel}>Overall Rating:</Text>
               <AirbnbRating
@@ -226,7 +226,7 @@ class Review extends Component{
           </ImageBackground>
         </View>
       );
-    }
+    
   }
 }
 const styles = StyleSheet.create({

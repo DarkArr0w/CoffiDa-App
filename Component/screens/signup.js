@@ -28,7 +28,7 @@ class Signup extends Component{
         ToastAndroid.show("Successfully Created", ToastAndroid.SHORT);
         this.props.navigation.navigate('Login');
         return response.json()
-      }else if(response.status === 400){
+      }if(response.status === 400){
         ToastAndroid.show("Invalid Credentials", ToastAndroid.SHORT);
       }else{
         throw 'Something went wrong';
@@ -46,11 +46,12 @@ class Signup extends Component{
   toggleSwitch() {
     this.setState({ showPassword: !this.state.showPassword });
   }
+
   render(){
     return (
       <View style={styles.container}>
         <ImageBackground
-          source={require('./../../Images/Coffee_Cup(0.3).jpg')} style={styles.image}>
+          source={require("../../Images/Coffee_Cup(0.3).jpg")} style={styles.image}>
           <ScrollView>
             <Text  style={styles.text}> Complete Form to Register Account </Text>
             <Text style={styles.formLabel}>First Name:</Text>

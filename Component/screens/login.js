@@ -26,7 +26,7 @@ class Login extends Component{
       if(response.status === 200){
         ToastAndroid.show("Successfully Logged In", ToastAndroid.SHORT);
         return response.json()
-      }else if(response.status === 400){
+      }if(response.status === 400){
         ToastAndroid.show("Invalid email or password", ToastAndroid.SHORT);
       }else{
         throw 'Something went wrong';
@@ -46,9 +46,9 @@ class Login extends Component{
   }
 
   getUserInfo = async () => {
-    let token = await AsyncStorage.getItem('@token');
-    let id = await AsyncStorage.getItem('@id');
-    return fetch("http://10.0.2.2:3333/api/1.0.0/user/"+id,
+    const token = await AsyncStorage.getItem('@token');
+    const id = await AsyncStorage.getItem('@id');
+    return fetch(`http://10.0.2.2:3333/api/1.0.0/user/${id}`,
     {
       headers: {
         'Content-Type': 'application/json',
@@ -58,9 +58,9 @@ class Login extends Component{
     .then((response) => {
       if(response.status === 200){
         return response.json()
-      }else{
-        throw 'Something went wrong';
       }
+        throw 'Something went wrong';
+      
     })
     .then(async (responseJson) => {
       console.log(responseJson);
@@ -82,7 +82,7 @@ class Login extends Component{
     return (
       <View style={styles.container}>
         <ImageBackground
-          source={require('./../../Images/Coffee_Cup(0.3).jpg')} style={styles.image}>
+          source={require("../../Images/Coffee_Cup(0.3).jpg")} style={styles.image}>
           <ScrollView>
             <Text  style={styles.text}> Enter Credentials </Text>
             <Text style={styles.formLabel}>Email:</Text>

@@ -23,7 +23,7 @@ class UpdateReview extends Component{
   getUserInfo = async () => {
     let token = await AsyncStorage.getItem('@token');
     let id = await AsyncStorage.getItem('@id');
-    return fetch("http://10.0.2.2:3333/api/1.0.0/user/"+id,
+    return fetch(`http://10.0.2.2:3333/api/1.0.0/user/${id}`,
     {
       headers: {
         'Content-Type': 'application/json',
@@ -33,9 +33,9 @@ class UpdateReview extends Component{
     .then((response) => {
       if(response.status === 200){
         return response.json()
-      }else{
-        throw 'Something went wrong';
       }
+        throw 'Something went wrong';
+      
     })
     .then(async (responseJson) => {
       const userReview_id = [];
@@ -51,21 +51,13 @@ class UpdateReview extends Component{
     })
   }
 
-  ratingCompleted(rating, name) {
-    let stateObject = () => {
-      let returnObj = {};
-      returnObj[name] = rating;
-      return returnObj;
-    };
-    this.setState( stateObject );
-  }
 
   sendToServer = async (data) => {
     console.log(data.uri);
-    let token = await AsyncStorage.getItem('@token');
+    const token = await AsyncStorage.getItem('@token');
     const loc_id = this.state.location_id;
     const rev_id = this.state.review_id;
-    return fetch("http://10.0.2.2:3333/api/1.0.0/location/"+loc_id+"/review/"+rev_id+"/photo",
+    return fetch(`http://10.0.2.2:3333/api/1.0.0/location/${loc_id}/review/${rev_id}/photo`,
     {
       method: 'POST',
       headers: {
@@ -102,7 +94,7 @@ class UpdateReview extends Component{
 
   deletePhoto = async () => {
     let token = await AsyncStorage.getItem('@token');
-    return fetch("http://10.0.2.2:3333/api/1.0.0/location/"+this.state.location_id+"/review/"+this.state.review_id+"/photo",
+    return fetch(`http://10.0.2.2:3333/api/1.0.0/location/${this.state.location_id}/review/${this.state.review_id}/photo`,
     {
       method: 'DELETE',
       headers: {
@@ -126,7 +118,7 @@ class UpdateReview extends Component{
       ToastAndroid.show("Please only refer to coffee in your review.", ToastAndroid.SHORT);
     }else{
       let token = await AsyncStorage.getItem('@token');
-      return fetch("http://10.0.2.2:3333/api/1.0.0/location"+"/"+this.state.location_id+"/review/"+this.state.review_id,
+      return fetch(`${"http://10.0.2.2:3333/api/1.0.0/location"+"/"}${this.state.location_id}/review/${this.state.review_id}`,
       {
         method: 'PATCH',
         headers: {
@@ -158,6 +150,15 @@ class UpdateReview extends Component{
     }
   }
 
+  ratingCompleted(rating, name) {
+    const stateObject = () => {
+      const returnObj = {};
+      returnObj[name] = rating;
+      return returnObj;
+    };
+    this.setState( stateObject );
+  }
+
   render(){
     if(this.state.photo){
       return (
@@ -180,11 +181,11 @@ class UpdateReview extends Component{
           </TouchableOpacity>
         </View>
       )
-    }else{
+    }
       return (
         <View style={styles.container3}>
           <ImageBackground
-            source={require('./../../Images/Coffee_Cup(0.3).jpg')} style={styles.image}>
+            source={require("../../Images/Coffee_Cup(0.3).jpg")} style={styles.image}>
             <ScrollView>
               <Text style={styles.formLabel}>Overall Rating:</Text>
               <AirbnbRating
@@ -243,7 +244,7 @@ class UpdateReview extends Component{
           </ImageBackground>
         </View>
       );
-    }
+    
   }
 }
 const styles = StyleSheet.create({

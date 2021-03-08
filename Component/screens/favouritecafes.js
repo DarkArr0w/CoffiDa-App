@@ -17,9 +17,9 @@ class FavouriteCafes extends Component{
   }
 
   getData = async () => {
-    let token = await AsyncStorage.getItem('@token');
-    let id = await AsyncStorage.getItem('@id');
-    return fetch("http://10.0.2.2:3333/api/1.0.0/user/"+id,
+    const token = await AsyncStorage.getItem('@token');
+    const id = await AsyncStorage.getItem('@id');
+    return fetch(`http://10.0.2.2:3333/api/1.0.0/user/${id}`,
     {
     headers: {
       'Content-Type': 'application/json',
@@ -29,9 +29,9 @@ class FavouriteCafes extends Component{
   .then((response) => {
     if(response.status === 200){
       return response.json()
-    } else {
+    } 
       throw 'Something went wrong';
-    }
+    
   })
   .then((responseJson) => {
     this.setState({
@@ -54,7 +54,7 @@ class FavouriteCafes extends Component{
           <ActivityIndicator size="large" color="#f87217" />
         </View>
       )
-    } else {
+    } 
       return (
         <View style={styles.container}>
           <ImageBackground
@@ -82,10 +82,41 @@ class FavouriteCafes extends Component{
                     defaultRating={item.avg_overall_rating}
                     size={18}
                     showRating={false}
-                    isDisabled={true}
+                    isDisabled
                     selectedColor='#F87217'
                     unSelectedColor='#DDDDDD'
                   />
+                  <View style={styles.horizontal3}>
+                    <Text style={styles.text6}>Price Rating:</Text>
+                    <Text style={styles.text6}>Quality Rating:</Text>
+                    <Text style={styles.text6}>Cleanliness Rating:</Text>
+                  </View>
+                  <View style={styles.horizontal3}>
+                    <AirbnbRating
+                      defaultRating={item.price_rating}
+                      size={12}
+                      showRating={false}
+                      isDisabled
+                      selectedColor='#F87217'
+                      unSelectedColor='#DDDDDD'
+                    />
+                    <AirbnbRating
+                      defaultRating={item.quality_rating}
+                      size={12}
+                      showRating={false}
+                      isDisabled
+                      selectedColor='#F87217'
+                      unSelectedColor='#DDDDDD'
+                    />
+                    <AirbnbRating
+                      defaultRating={item.clenliness_rating}
+                      size={12}
+                      showRating={false}
+                      isDisabled
+                      selectedColor='#F87217'
+                      unSelectedColor='#DDDDDD'
+                    />
+                  </View>
                   <View style={styles.row} />
                 </View>
                 </TouchableOpacity>
@@ -95,7 +126,7 @@ class FavouriteCafes extends Component{
           </ImageBackground>
         </View>
       );
-    }
+    
   }
 }
 const styles = StyleSheet.create({
@@ -104,6 +135,10 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     backgroundColor: 'rgb(148, 199, 246)',
     padding:5,
+  },
+  horizontal3: {
+    flexDirection: 'row',
+    justifyContent: 'space-evenly',
   },
   image: {
     flex: 1,
@@ -139,6 +174,12 @@ const styles = StyleSheet.create({
     color: 'black',
     fontFamily: 'Roboto',
     top: 4,
+  },
+  text6:{
+    fontSize: 12,
+    color: 'black',
+    fontFamily: 'Roboto',
+    alignItems: 'center',
   },
   space: {
     height: 5,

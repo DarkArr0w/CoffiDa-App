@@ -35,7 +35,7 @@ class HomeMenu extends Component{
     const nav = this.props.navigation;
     return(
       <View style={styles.container}>
-        <ImageBackground msource={require('./../../Images/Coffee_Cup.jpg')} style={styles.image}>
+        <ImageBackground source={require("../../Images/Coffee_Cup.jpg")} style={styles.image}>
           <TouchableOpacity
             style={styles.button}
             onPress={() => nav.navigate('Login')}>

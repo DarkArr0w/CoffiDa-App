@@ -24,7 +24,7 @@ class ListView extends Component{
 
   componentDidMount(){
     this.unsubscribe = this.props.navigation.addListener('focus', () => {
-      this.getData("http://10.0.2.2:3333/api/1.0.0/find?limit=4&offset="+this.state.offset+"&");
+      this.getData(`http://10.0.2.2:3333/api/1.0.0/find?limit=3&offset=${this.state.offset}&`);
     });
   }
 
@@ -33,7 +33,7 @@ class ListView extends Component{
   }
 
   getData = async (url) => {
-    let token = await AsyncStorage.getItem('@token');
+    const token = await AsyncStorage.getItem('@token');
     return fetch(url,
     {
       headers: {
@@ -43,9 +43,9 @@ class ListView extends Component{
   .then((response) => {
     if(response.status === 200){
       return response.json()
-    }else{
-      throw 'Something went wrong';
     }
+      throw 'Something went wrong';
+    
   })
   .then((responseJson) => {
     this.setState({
@@ -62,7 +62,7 @@ class ListView extends Component{
 
 search = () => {
   this.setState({offset:0});
-  let url = "http://10.0.2.2:3333/api/1.0.0/find?limit=4&offset=0&"
+  let url = "http://10.0.2.2:3333/api/1.0.0/find?limit=3&offset=0&"
   let addquery = ""
   console.log(this.state.q);
   console.log(this.state.overall_rating);
@@ -71,28 +71,28 @@ search = () => {
   console.log(this.state.clenliness_rating);
 
   if(this.state.q != ''){
-    url += "q=" + this.state.q + "&";
-    addquery += "q=" + this.state.q + "&";
+    url += `q=${  this.state.q  }&`;
+    addquery += `q=${  this.state.q  }&`;
   }
 
   if(this.state.overall_rating > 0){
-    url += "overall_rating=" + this.state.overall_rating + "&";
-    addquery += "overall_rating=" + this.state.overall_rating + "&";
+    url += `overall_rating=${  this.state.overall_rating  }&`;
+    addquery += `overall_rating=${  this.state.overall_rating  }&`;
   }
 
   if(this.state.price_rating > 0){
-    url += "price_rating=" + this.state.price_rating + "&";
-    addquery += "price_rating=" + this.state.price_rating + "&";
+    url += `price_rating=${  this.state.price_rating  }&`;
+    addquery += `price_rating=${  this.state.price_rating  }&`;
   }
 
   if(this.state.quality_rating > 0){
-    url += "quality_rating=" + this.state.quality_rating + "&";
-    addquery += "price_rating=" + this.state.price_rating + "&";
+    url += `quality_rating=${  this.state.quality_rating  }&`;
+    addquery += `price_rating=${  this.state.price_rating  }&`;
   }
 
   if(this.state.clenliness_rating > 0){
-    url += "clenliness_rating=" + this.state.clenliness_rating + "&";
-    addquery += "clenliness_rating=" + this.state.clenliness_rating + "&";
+    url += `clenliness_rating=${  this.state.clenliness_rating  }&`;
+    addquery += `clenliness_rating=${  this.state.clenliness_rating  }&`;
   }
 
   if(this.state.favourite === true){
@@ -104,14 +104,14 @@ search = () => {
     url += "search_in=reviewed&";
     addquery += "search_in=reviewed&";
   }
-  console.log("query = "+addquery);
+  console.log(`query = ${addquery}`);
   this.setState({query:addquery})
   this.getData(url);
 }
 
 ratingCompleted(rating, name) {
-  let stateObject = () => {
-    let returnObj = {};
+  const stateObject = () => {
+    const returnObj = {};
     returnObj[name] = rating;
     return returnObj;
   };
@@ -119,8 +119,8 @@ ratingCompleted(rating, name) {
 }
 
 getMoreData = () =>{
-  this.setState({offset:this.state.offset+4},
-  ()=>this.getData("http://10.0.2.2:3333/api/1.0.0/find?limit=4&offset="+this.state.offset+"&"+this.state.query))
+  this.setState({offset:this.state.offset+3},
+  ()=>this.getData("http://10.0.2.2:3333/api/1.0.0/find?limit=3&offset="+this.state.offset+"&"+this.state.query))
 }
 
   render(){
@@ -131,18 +131,18 @@ getMoreData = () =>{
           <ActivityIndicator size="large" color="#f87217" />
         </View>
       )
-    } else if (this.state.search){
+    } if (this.state.search){
       return(
         <View style={styles.container3}>
           <ImageBackground
-            source={require('./../../Images/Coffee_Cup(0.3).jpg')} style={styles.image}>
+            source={require("../../Images/Coffee_Cup(0.3).jpg")} style={styles.image}>
             <ScrollView>
               <Text style={styles.formLabel}>Search:</Text>
               <TextInput
                 value={this.state.q}
                 style={styles.formInput}
                 placeholder="Search Here"
-                onChangeText={(q) => this.setState({q: q})}
+                onChangeText={(q) => this.setState({q})}
               />
               <Text style={styles.formLabel}>Overall Rating:</Text>
               <AirbnbRating
@@ -226,11 +226,11 @@ getMoreData = () =>{
           </ImageBackground>
         </View>
       )  
-    } else {
+    } 
       return (
         <View style={styles.container}>
           <ImageBackground
-            source={require('./../../Images/Coffee_Cup(0.3).jpg')} style={styles.image}>
+            source={require("../../Images/Coffee_Cup(0.3).jpg")} style={styles.image}>
             <View style={styles.horizontal}>
               <Text style={styles.text2}>Locations:</Text>
               <TouchableOpacity
@@ -259,10 +259,41 @@ getMoreData = () =>{
                     defaultRating={item.avg_overall_rating}
                     size={18}
                     showRating={false}
-                    isDisabled={true}
+                    isDisabled
                     selectedColor='#F87217'
                     unSelectedColor='#DDDDDD'
                   />
+                  <View style={styles.horizontal3}>
+                    <Text style={styles.text6}>Price Rating:</Text>
+                    <Text style={styles.text6}>Quality Rating:</Text>
+                    <Text style={styles.text6}>Cleanliness Rating:</Text>
+                  </View>
+                  <View style={styles.horizontal3}>
+                    <AirbnbRating
+                      defaultRating={item.price_rating}
+                      size={12}
+                      showRating={false}
+                      isDisabled
+                      selectedColor='#F87217'
+                      unSelectedColor='#DDDDDD'
+                    />
+                    <AirbnbRating
+                      defaultRating={item.quality_rating}
+                      size={12}
+                      showRating={false}
+                      isDisabled
+                      selectedColor='#F87217'
+                      unSelectedColor='#DDDDDD'
+                    />
+                    <AirbnbRating
+                      defaultRating={item.clenliness_rating}
+                      size={12}
+                      showRating={false}
+                      isDisabled
+                      selectedColor='#F87217'
+                      unSelectedColor='#DDDDDD'
+                    />
+                  </View>
                   <View style={styles.space} />
                   <View style={styles.row} />
                 </View>
@@ -275,7 +306,7 @@ getMoreData = () =>{
           </ImageBackground>
         </View>
       );
-    }
+    
   }
 }
 const styles = StyleSheet.create({
@@ -321,8 +352,12 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     paddingLeft: 30,
   },
+  horizontal3: {
+    flexDirection: 'row',
+    justifyContent: 'space-evenly',
+  },
   text4:{
-    fontSize: 20,
+    fontSize: 18,
     color: 'black',
     fontFamily: 'Roboto',
     textAlign: 'center',
@@ -392,6 +427,12 @@ const styles = StyleSheet.create({
     color: 'black',
     fontFamily: 'Roboto',
     padding: 3,
+  },
+  text6:{
+    fontSize: 12,
+    color: 'black',
+    fontFamily: 'Roboto',
+    alignItems: 'center',
   },
   space: {
     height: 5,

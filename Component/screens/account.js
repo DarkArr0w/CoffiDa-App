@@ -26,17 +26,18 @@ class Account extends Component{
   }
 
   userinfo = async () => {
-    let firstname = await AsyncStorage.getItem('@first_name');
+    const firstname = await AsyncStorage.getItem('@first_name');
     this.setState({first_name: firstname});
-    let lastname = await AsyncStorage.getItem('@last_name');
+    const lastname = await AsyncStorage.getItem('@last_name');
     this.setState({last_name: lastname});
-    let Email = await AsyncStorage.getItem('@email');
+    const Email = await AsyncStorage.getItem('@email');
     this.setState({email: Email});
   }
+  
   update = async () => {
-    let token = await AsyncStorage.getItem('@token');
-    let id = await AsyncStorage.getItem('@id');
-    return fetch("http://10.0.2.2:3333/api/1.0.0/user/"+id,
+    const token = await AsyncStorage.getItem('@token');
+    const id = await AsyncStorage.getItem('@id');
+    return fetch(`http://10.0.2.2:3333/api/1.0.0/user/${id}`,
     {
       method: 'PATCH',
       headers: {
@@ -45,8 +46,11 @@ class Account extends Component{
       },
       body: JSON.stringify(this.state)
     })
-    .then((response) => {
+    .then(async(response) => {
       if(response.status === 200){
+        await AsyncStorage.setItem('@first_name', this.state.first_name);
+        await AsyncStorage.setItem('@last_name', this.state.last_name);
+        await AsyncStorage.setItem('@email', this.state.email);
         ToastAndroid.show("Successfully Updated", ToastAndroid.SHORT);
         this.props.navigation.navigate('Logout');
       }else{
@@ -58,11 +62,12 @@ class Account extends Component{
   toggleSwitch() {
     this.setState({ showPassword: !this.state.showPassword });
   }
+
   render(){
     return (
       <View style={styles.container}>
         <ImageBackground
-          source={require('./../../Images/Coffee_Cup(0.3).jpg')} style={styles.image}>
+          source={require("../../Images/Coffee_Cup(0.3).jpg")} style={styles.image}>
           <ScrollView>
             <Text  style={styles.text}> Account Information </Text>
             <Text style={styles.formLabel}>First Name:</Text>

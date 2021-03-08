@@ -66,7 +66,7 @@ class Logout extends Component{
     return(
       <View style={styles.container}>
         <ImageBackground
-          source={require('./../../Images/Coffee_Cup(0.3).jpg')} style={styles.image}>
+          source={require("../../Images/Coffee_Cup(0.3).jpg")} style={styles.image}>
           <TouchableOpacity
             style={styles.button}
             onPress={() => this.props.navigation.navigate('Account')}>
