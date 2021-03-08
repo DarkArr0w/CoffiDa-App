@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Text, ActivityIndicator, Button, Alert,  TextInput, PermissionsAndroid, ToastAndroid } from 'react-native';
+import { View, Text, ActivityIndicator, TouchableOpacity,  StyleSheet, PermissionsAndroid, ToastAndroid } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Geolocation from 'react-native-geolocation-service';
 import MapView, { PROVIDER_GOOGLE, Marker } from 'react-native-maps';
@@ -20,7 +20,7 @@ async function requestLocationPermission(){
     if (granted === PermissionsAndroid.RESULTS.GRANTED) {
       console.log('You can access location');
       return true;
-    } else {
+    }else{
       console.log('Location permission denied');
       return false;
     }
@@ -63,10 +63,7 @@ class Home extends Component{
       console.log("asking for permission...");
       this.state.locationPermission = requestLocationPermission();
     }
-
-
     Geolocation.getCurrentPosition((position) => {
-      //const location = JSON.stringify(position);
       const location = position;
       console.log("LOCATION 1: ", location.coords);
       this.setState({location: {
@@ -75,7 +72,8 @@ class Home extends Component{
       }});
       this.setState({isLoading: false});
     }, (error) => {
-      Alert.alert(error.message);
+      console.error(error);
+      ToastAndroid.show(error, ToastAndroid.SHORT);
     }, {
       enableHighAccuracy: true,
       timeout: 20000,
@@ -83,12 +81,11 @@ class Home extends Component{
     });
   }
 
-
   getData = async () => {
     let token = await AsyncStorage.getItem('@token');
     return fetch("http://10.0.2.2:3333/api/1.0.0/find",
     {
-    headers: {
+      headers: {
       'X-Authorization': token
     },
     })
@@ -110,13 +107,13 @@ class Home extends Component{
     })
   }
 
-
   render(){
     const nav = this.props.navigation;
     if(this.state.isLoading){
       return (
-        <View>
-       <ActivityIndicator size="large" color="#00ff00" />
+        <View style={styles.container}>
+          <Text  style={styles.text}> Loading... </Text>
+          <ActivityIndicator size="large" color="#f87217" />
         </View>
       )
     }else{
@@ -136,14 +133,62 @@ class Home extends Component{
             <Marker
               coordinate={this.state.location}
               title="My location"
-              description="Here I am"
+              description="Here you are"
             />
           </MapView>
-          <Button onPress={() => nav.navigate('ListView')} title="List View" />
-          <Button onPress={() => nav.navigate('Logout')} title="Menu" />
+          <View style={styles.horizontal}>
+            <TouchableOpacity
+              style={styles.button}
+              onPress={() => nav.navigate('ListView')}>
+              <Text style={styles.buttonText}>List View</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.button}
+              onPress={() => nav.navigate('Logout')}>
+              <Text style={styles.buttonText}>Menu</Text>
+            </TouchableOpacity>
+          </View>
         </View>
       );
     }
   }
 }
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    flexDirection: 'column',
+    backgroundColor: 'rgb(148, 199, 246)',
+    padding:20,
+  },
+  horizontal: {
+    flexDirection: "row",
+    justifyContent: "space-around",
+    backgroundColor: 'rgb(148, 199, 246)',
+    padding: 10,
+  },
+  button: {
+    backgroundColor: 'rgba(248, 114, 23, 0.8)',
+    width: 125,
+    padding: 8,
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: 10,
+  },
+    buttonText: {
+    fontSize: 20,
+    color: 'black',
+    fontFamily: 'Roboto',
+  },
+  text:{
+    fontSize: 16,
+    color: 'black',
+    padding: 3,
+    alignSelf: 'center',
+    fontFamily: 'Roboto',
+  },
+  space: {
+    height: 15,
+    width: 15,
+  },
+});
 export default Home;
